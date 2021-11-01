@@ -1,0 +1,12 @@
+# IntelliJ project files
+.idea
+*.iml
+
+# Sublime text project file
+*.sublime-project
+*.sublime-workspace
+
+# Compilation output
+target
+build
+out
