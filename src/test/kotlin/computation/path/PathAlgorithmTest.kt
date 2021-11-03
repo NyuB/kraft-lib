@@ -1,11 +1,14 @@
 package computation
 
+import computation.path.PathAlgorithm
 import graph.Edge
 import graph.EdgePath
 import graph.Graph
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.fail
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
+import org.junit.jupiter.api.fail
+import java.util.concurrent.TimeUnit
 
 
 abstract class PathAlgorithmTest {
@@ -63,6 +66,20 @@ abstract class PathAlgorithmTest {
         return result
     }
 
+    protected fun negativeEdgesNoCycle(): Graph<Char, Edge<Char>> {
+        val result = Graph<Char, Edge<Char>>()
+        result.addEdge(Edge(A, B, 37.0))
+        result.addEdge(Edge(B, C, -5.0))
+        result.addEdge(Edge(C, D, 10.0))
+        return result
+    }
+
+    protected fun negativeCycle(): Graph<Char, Edge<Char>> {
+        val result = negativeEdgesNoCycle()
+        result.addEdge(Edge(C, B, 3.0))
+        return result
+    }
+
     protected fun twoIsolatedComponentGraph(): Graph<Char, Edge<Char>> {
         val result = Graph<Char, Edge<Char>>()
         result.addEdge(Edge(A, B))
@@ -112,20 +129,20 @@ abstract class PathAlgorithmTest {
     fun executeInBoundedSteps(
         graph: Graph<Char, Edge<Char>>,
         origin: Char, destination: Char,
-        lowBoundInclusive : Int,
-        highBoundInclusive : Int,
+        lowBoundInclusive: Int,
+        highBoundInclusive: Int,
         exec: (AlgorithmResult<EdgePath<Char, Edge<Char>>>) -> Unit
     ) {
-        var algo = instantiateAlgorithm(graph, origin ,destination)
+        var algo = instantiateAlgorithm(graph, origin, destination)
         var count = 0
-        while(algo.isRunning()){
-            if(count > highBoundInclusive){
+        while (algo.isRunning()) {
+            if (count > highBoundInclusive) {
                 fail("Too many steps")
             }
-            algo = algo.step()
+            algo.step()
             count++
         }
-        if(count < lowBoundInclusive){
+        if (count < lowBoundInclusive) {
             fail("Too few steps")
         }
         exec(algo.getResult())
@@ -156,6 +173,7 @@ abstract class PathAlgorithmTest {
         }
 
     @Test
+    @Timeout(5, unit = TimeUnit.SECONDS)
     fun `Given a strongly connected graph, each pair of nodes should result in a success`() {
         val graph = stronglyConnectedGraph()
         for (origin in graph.nodeSet()) {

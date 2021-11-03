@@ -1,16 +1,23 @@
-package computation
+package computation.path
 
 import graph.Edge
 import java.util.*
-import kotlin.Comparator
-import kotlin.collections.HashMap
 
-open class DijkstraAlgorithm<N, E : Edge<N>>(input : PathAlgorithmInput<N ,E>) : PathAlgorithm<N,E>(input) {
+open class DijkstraAlgorithm<N, E : Edge<N>>(input: PathAlgorithmInput<N, E>) : PathAlgorithm<N, E>(input) {
     private val priorityQueue = PriorityQueue(getLabelComparator())
 
-    protected fun getLabelComparator() : Comparator<PathBacktrackLabel<N,E>> {
+    protected fun getLabelComparator(): Comparator<PathBacktrackLabel<N, E>> {
         return PathBackTrackLabelComparator {
             nodesCurrentDistanceMap[it]!!
+        }
+    }
+
+    override fun validateInputAndRaiseException() {
+        super.validateInputAndRaiseException()
+        for (edge in input.graph.getAllEdges()) {
+            if (edge.weight < 0.0) {
+                throw IllegalArgumentException("No negative edge allowed for dijkstra algorithm")
+            }
         }
     }
 
@@ -24,20 +31,17 @@ open class DijkstraAlgorithm<N, E : Edge<N>>(input : PathAlgorithmInput<N ,E>) :
     }
 
     override fun step(): PathAlgorithm<N, E> {
-        if(priorityQueue.size == 0){
+        if (priorityQueue.size == 0) {
             fail()
-        }
-        else {
+        } else {
             val treatedNode = priorityQueue.poll()
-            if(treatedNode.node in fixedNodes){
+            if (treatedNode.node in fixedNodes) {
                 //Shortest path to this node has already been computed
-            }
-            else if(isDestination(treatedNode)){
+            } else if (isDestination(treatedNode)) {
                 end(treatedNode.asEdgePath(input.origin, input.destination))
-            }
-            else{
+            } else {
                 fixedNodes.add(treatedNode.node)
-                for(outingEdge in input.graph.getOutEdgesFrom(treatedNode.node)){
+                for (outingEdge in input.graph.getOutEdgesFrom(treatedNode.node)) {
                     updateQueueWithReachableEdge(treatedNode, outingEdge)
                 }
             }
@@ -45,24 +49,24 @@ open class DijkstraAlgorithm<N, E : Edge<N>>(input : PathAlgorithmInput<N ,E>) :
         return this
     }
 
-    private fun updateQueueWithReachableEdge(treatedNode: PathBacktrackLabel<N,E>, outingEdge : E){
+    private fun updateQueueWithReachableEdge(treatedNode: PathBacktrackLabel<N, E>, outingEdge: E) {
         val dist = distanceWithEdge(outingEdge)
-        if(dist < currentDistance(outingEdge.destination)){
+        if (dist < currentDistance(outingEdge.destination)) {
             updateCurrentDistance(outingEdge.destination, dist)
             priorityQueue.add(PathBacktrackLabel(outingEdge.destination, Pair(outingEdge, treatedNode)))
         }
     }
 
-    private fun currentDistance(node : N): Double {
+    private fun currentDistance(node: N): Double {
         return nodesCurrentDistanceMap.getOrDefault(node, Double.MAX_VALUE)
     }
 
-    private fun updateCurrentDistance(node : N, distance: Double){
-        priorityQueue.removeIf {it.node == node}
+    private fun updateCurrentDistance(node: N, distance: Double) {
+        priorityQueue.removeIf { it.node == node }
         nodesCurrentDistanceMap[node] = distance
     }
 
-    private fun distanceWithEdge(edge : E): Double {
+    private fun distanceWithEdge(edge: E): Double {
         return currentDistance(edge.origin) + edge.weight
     }
 }
