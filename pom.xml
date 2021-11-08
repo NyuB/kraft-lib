@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>consoleApp</artifactId>
-    <groupId>me.brice</groupId>
+    <artifactId>kraft-lib</artifactId>
+    <groupId>insa.decaeste</groupId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>consoleApp</name>
+    <name>kraft-lib</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -57,14 +57,6 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.22.2</version>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <configuration>
-                    <mainClass>MainKt</mainClass>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
@@ -87,5 +79,4 @@
             <version>1.5.10</version>
         </dependency>
     </dependencies>
-
 </project>

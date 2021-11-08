@@ -7,16 +7,16 @@ import org.junit.jupiter.api.Test
 class GraphTest {
 
     private fun <N> constructEmptyGraph() = Graph<N, Edge<N>>()
+
     private fun <N> withEmptyGraph(actions: Graph<N, Edge<N>>.() -> Unit) =
         withGraph({ constructEmptyGraph<N>() }, actions)
 
     private fun withEmptyIntGraph(actions: Graph<Int, Edge<Int>>.() -> Unit) = withEmptyGraph(actions)
+
     private fun <N> withGraph(initializer: () -> Graph<N, Edge<N>>, actions: Graph<N, Edge<N>>.() -> Unit) {
         initializer().actions()
     }
 
-    data class TestDataClass(val number: Int)
-    class TestClass(val number: Int)
 
     @Test
     fun `Initial size is zero`() = withEmptyIntGraph {
@@ -61,31 +61,40 @@ class GraphTest {
             assertEquals(1, numberOfNodes())
         }
 
+
     @Test
-    fun `Data class node identity behavior`() = withEmptyGraph<TestDataClass> {
-        val a = TestDataClass(0)
-        val b = TestDataClass(1)
-        val aa = TestDataClass(0)
-        addNode(a)
-        addNode(b)
-        assertEquals(2, numberOfNodes())
-        addNode(aa)
-        assertEquals(2, numberOfNodes())
-        assertTrue(containsNode(a))
-        assertTrue(containsNode(aa))
+    fun `Data class node identity behavior`() {
+        data class TestDataClass(val number: Int)
+
+        withEmptyGraph<TestDataClass> {
+            val a = TestDataClass(0)
+            val b = TestDataClass(1)
+            val aa = TestDataClass(0)
+            addNode(a)
+            addNode(b)
+            assertEquals(2, numberOfNodes())
+            addNode(aa)
+            assertEquals(2, numberOfNodes())
+            assertTrue(containsNode(a))
+            assertTrue(containsNode(aa))
+        }
     }
 
     @Test
-    fun `Regular classes node identity behavior`() = withEmptyGraph<TestClass> {
-        val a = TestClass(0)
-        val b = TestClass(1)
-        val aa = TestClass(0)
-        addNode(a)
-        addNode(b)
-        assertEquals(2, numberOfNodes())
-        addNode(aa)
-        assertEquals(3, numberOfNodes())
-        assertTrue(containsNode(a))
-        assertTrue(containsNode(aa))
+    fun `Regular classes node identity behavior`() {
+        class TestClass(val number: Int)
+        withEmptyGraph<TestClass> {
+
+            val a = TestClass(0)
+            val b = TestClass(1)
+            val aa = TestClass(0)
+            addNode(a)
+            addNode(b)
+            assertEquals(2, numberOfNodes())
+            addNode(aa)
+            assertEquals(3, numberOfNodes())
+            assertTrue(containsNode(a))
+            assertTrue(containsNode(aa))
+        }
     }
 }

@@ -2,6 +2,7 @@ package graph
 
 class EdgePath<N, E : Edge<N>>(val origin: N, val destination: N, val edges: List<E>) {
     val isValid = validate()
+
     private fun validate(): Boolean {
         if (edges.isEmpty()) {
             return origin == destination

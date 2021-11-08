@@ -6,6 +6,7 @@ import graph.EdgePath
 
 abstract class PathAlgorithm<N, E : Edge<N>>(input: PathAlgorithmInput<N, E>) :
     AbstractAlgorithm<PathAlgorithmInput<N, E>, EdgePath<N, E>>(input) {
+
     init {
         this.validateInputAndRaiseException()
     }

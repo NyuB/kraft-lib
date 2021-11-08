@@ -2,6 +2,7 @@ package graph
 
 open class Graph<N, E : Edge<N>> {
     private val edges = HashMap<N, MutableList<E>>()
+
     fun addNode(node: N) {
         edges.putIfAbsent(node, ArrayList())
     }

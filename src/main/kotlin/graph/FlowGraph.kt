@@ -1,6 +1,7 @@
 package graph
 
-class FlowGraph<N, E : FlowEdge<N>>(val source: N, val sink: N) : Graph<N, E>() {
+open class FlowGraph<N, E : FlowEdge<N>>(val source: N, val sink: N) : Graph<N, E>() {
+
     init {
         addNode(source)
         addNode(sink)

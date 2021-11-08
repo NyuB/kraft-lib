@@ -1,14 +1,12 @@
-package computation
+package computation.path
 
-import computation.path.BellmanFordAlgorithm
-import computation.path.PathAlgorithm
-import computation.path.PathAlgorithmInput
 import graph.Edge
 import graph.Graph
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class BellmanFordAlgorithmTest : ShortestPathAlgorithmTest() {
+
     override fun instantiateAlgorithm(
         graph: Graph<Char, Edge<Char>>,
         origin: Char,

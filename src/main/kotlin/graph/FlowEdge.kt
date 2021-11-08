@@ -2,6 +2,7 @@ package graph
 
 class FlowEdge<N>(edge: Edge<N>, val capacity: Int, flow: Int = 0) :
     Edge<N>(edge.origin, edge.destination, edge.weight) {
+
     var flow = validateFlow(flow)
         set(value) {
             field = validateFlow(value)

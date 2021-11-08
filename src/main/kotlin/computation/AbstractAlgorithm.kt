@@ -20,6 +20,7 @@ abstract class AbstractAlgorithm<I, T>(val input: I) {
     }
 
     fun isRunning() = !ended
+
     fun isEnded() = ended
 
     fun computeUntilEnd(): AbstractAlgorithm<I, T> {

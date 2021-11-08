@@ -4,7 +4,6 @@ import graph.Edge
 import graph.EdgePath
 
 class PathBacktrackLabel<N, E : Edge<N>>(val node: N, val previous: Pair<E, PathBacktrackLabel<N, E>>?) {
-    fun isLastItem() = previous == null
 
     private fun asEdgePath(origin: N, destination: N, accumulator: MutableList<E>): EdgePath<N, E> {
         return if (previous == null) {

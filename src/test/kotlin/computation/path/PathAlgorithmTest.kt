@@ -1,6 +1,6 @@
-package computation
+package computation.path
 
-import computation.path.PathAlgorithm
+import computation.AlgorithmResult
 import graph.Edge
 import graph.EdgePath
 import graph.Graph
@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit
 
 
 abstract class PathAlgorithmTest {
+
     abstract fun instantiateAlgorithm(
         graph: Graph<Char, Edge<Char>>,
         origin: Char,
@@ -92,26 +93,23 @@ abstract class PathAlgorithmTest {
         return result
     }
 
-    fun wikipediaGraph(): Graph<Char, Edge<Char>> {
+    fun wikipediaDijkstraGraph(): Graph<Char, Edge<Char>> {
         val graph = Graph<Char, Edge<Char>>()
+
         graph.addEdge(Edge(A, B, 7.0))
         graph.addEdge(Edge(A, C, 9.0))
         graph.addEdge(Edge(A, F, 14.0))
         graph.addEdge(Edge(B, A, 7.0))
         graph.addEdge(Edge(C, A, 9.0))
         graph.addEdge(Edge(F, A, 14.0))
-
         graph.addEdge(Edge(B, C, 10.0))
         graph.addEdge(Edge(C, B, 10.0))
-
         graph.addEdge(Edge(C, D, 11.0))
         graph.addEdge(Edge(D, C, 11.0))
         graph.addEdge(Edge(C, F, 2.0))
         graph.addEdge(Edge(F, C, 2.0))
-
         graph.addEdge(Edge(D, E, 6.0))
         graph.addEdge(Edge(E, D, 6.0))
-
         graph.addEdge(Edge(E, F, 9.0))
         graph.addEdge(Edge(F, E, 9.0))
 

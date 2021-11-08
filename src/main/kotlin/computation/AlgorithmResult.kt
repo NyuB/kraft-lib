@@ -7,8 +7,8 @@ class AlgorithmResult<T>(private val result: T?) {
     }
 
     fun isSuccess() = result != null
-    fun isFailure() = result == null
 
+    fun isFailure() = result == null
 
     class IfSuccessElseBlock<T>(private val origin: AlgorithmResult<T>) {
         fun elseThen(failureHandler: () -> Unit) {

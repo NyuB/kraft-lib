@@ -53,6 +53,4 @@ class BellmanFordAlgorithm<N, E : Edge<N>>(input: PathAlgorithmInput<N, E>) : Pa
             end(labels[input.destination]!!.asEdgePath(input.origin, input.destination))
         }
     }
-
-
 }
