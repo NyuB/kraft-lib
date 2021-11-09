@@ -1,9 +1,9 @@
 package computation
 
-abstract class AbstractAlgorithm<I, T>(val input: I) {
+abstract class AbstractAlgorithm<I, T>(val input: I) : StepableComputation<I,T> {
     private var ended = false
-    private var result = AlgorithmResult<T>(null)
-    abstract fun step(): AbstractAlgorithm<I, T>
+    private var result = ComputationResult<T>(null)
+    abstract override fun step(): AbstractAlgorithm<I, T>
 
     init {
         this.validateInputAndRaiseException()
@@ -11,7 +11,7 @@ abstract class AbstractAlgorithm<I, T>(val input: I) {
 
     abstract fun validateInputAndRaiseException()
     protected fun end(result: T?) {
-        this.result = AlgorithmResult(result)
+        this.result = ComputationResult(result)
         this.ended = true
     }
 
@@ -19,16 +19,16 @@ abstract class AbstractAlgorithm<I, T>(val input: I) {
         this.end(null)
     }
 
-    fun isRunning() = !ended
+    override fun isRunning() = !ended
 
-    fun isEnded() = ended
+    override fun isEnded() = ended
 
-    fun computeUntilEnd(): AbstractAlgorithm<I, T> {
+    override fun computeUntilEnd(): AbstractAlgorithm<I, T> {
         while (isRunning()) {
             step()
         }
         return this
     }
 
-    fun getResult(): AlgorithmResult<T> = result
+    override fun getResult(): ComputationResult<T> = result
 }

@@ -1,6 +1,6 @@
 package computation.path
 
-import computation.AlgorithmResult
+import computation.ComputationResult
 import graph.Edge
 import graph.EdgePath
 import graph.Graph
@@ -119,7 +119,7 @@ abstract class PathAlgorithmTest {
     fun withEndResult(
         graph: Graph<Char, Edge<Char>>,
         origin: Char, destination: Char,
-        exec: (AlgorithmResult<EdgePath<Char, Edge<Char>>>) -> Unit
+        exec: (ComputationResult<EdgePath<Char, Edge<Char>>>) -> Unit
     ) {
         exec(instantiateAlgorithm(graph, origin, destination).computeUntilEnd().getResult())
     }
@@ -129,7 +129,7 @@ abstract class PathAlgorithmTest {
         origin: Char, destination: Char,
         lowBoundInclusive: Int,
         highBoundInclusive: Int,
-        exec: (AlgorithmResult<EdgePath<Char, Edge<Char>>>) -> Unit
+        exec: (ComputationResult<EdgePath<Char, Edge<Char>>>) -> Unit
     ) {
         var algo = instantiateAlgorithm(graph, origin, destination)
         var count = 0
