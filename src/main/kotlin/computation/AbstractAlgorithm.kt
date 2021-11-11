@@ -1,6 +1,7 @@
 package computation
 
-abstract class AbstractAlgorithm<I, T>(val input: I) : StepableComputation<I,T> {
+abstract class AbstractAlgorithm<I, T>(val input: I) : StepableComputation<I, T> {
+
     private var ended = false
     private var result = ComputationResult<T>(null)
     abstract override fun step(): AbstractAlgorithm<I, T>

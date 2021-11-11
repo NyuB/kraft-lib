@@ -3,6 +3,7 @@ package computation.path
 import graph.Edge
 
 class BellmanFordAlgorithm<N, E : Edge<N>>(input: PathAlgorithmInput<N, E>) : PathAlgorithm<N, E>(input) {
+
     private val distances = HashMap<N, Double>()
     private val labels = HashMap<N, PathBacktrackLabel<N, E>>()
     private var updatedSet = mutableSetOf<N>()
@@ -49,7 +50,8 @@ class BellmanFordAlgorithm<N, E : Edge<N>>(input: PathAlgorithmInput<N, E>) : Pa
     private fun cycleCheckStep() {
         if (updatedSet.isNotEmpty() || !labels.containsKey(input.destination)) {
             fail()
-        } else {
+        }
+        else {
             end(labels[input.destination]!!.asEdgePath(input.origin, input.destination))
         }
     }

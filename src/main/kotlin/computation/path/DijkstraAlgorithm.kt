@@ -4,6 +4,7 @@ import graph.Edge
 import java.util.*
 
 open class DijkstraAlgorithm<N, E : Edge<N>>(input: PathAlgorithmInput<N, E>) : PathAlgorithm<N, E>(input) {
+
     private val priorityQueue = PriorityQueue(getLabelComparator())
 
     protected fun getLabelComparator(): Comparator<PathBacktrackLabel<N, E>> {
@@ -33,13 +34,16 @@ open class DijkstraAlgorithm<N, E : Edge<N>>(input: PathAlgorithmInput<N, E>) : 
     override fun step(): PathAlgorithm<N, E> {
         if (priorityQueue.size == 0) {
             fail()
-        } else {
+        }
+        else {
             val treatedNode = priorityQueue.poll()
             if (treatedNode.node in fixedNodes) {
                 //Shortest path to this node has already been computed
-            } else if (isDestination(treatedNode)) {
+            }
+            else if (isDestination(treatedNode)) {
                 end(treatedNode.asEdgePath(input.origin, input.destination))
-            } else {
+            }
+            else {
                 fixedNodes.add(treatedNode.node)
                 for (outingEdge in input.graph.getOutEdgesFrom(treatedNode.node)) {
                     updateQueueWithReachableEdge(treatedNode, outingEdge)

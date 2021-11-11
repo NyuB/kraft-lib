@@ -1,6 +1,7 @@
 package graph
 
 open class Graph<N, E : Edge<N>> {
+
     private val edges = HashMap<N, MutableList<E>>()
 
     fun addNode(node: N) {
@@ -28,7 +29,8 @@ open class Graph<N, E : Edge<N>> {
     fun getInEdgesTo(node: N): List<E> {
         if (!this.containsNode(node)) {
             throw IllegalArgumentException("Requesting edges to a node outside the graph is not allowed")
-        } else {
+        }
+        else {
             return getAllEdges().filter { it.destination == node }.toList()
         }
     }

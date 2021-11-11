@@ -9,5 +9,6 @@ sealed class GapEdge<N>(val referenced: FlowEdge<N>, val flowDelta: Int, revert:
         if (revert) referenced.origin else referenced.destination,
         if (revert) -referenced.weight else referenced.weight
     ) {
+
     abstract fun updateReferencedFlow(maxDelta: Int)
 }

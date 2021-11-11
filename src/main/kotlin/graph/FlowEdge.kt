@@ -11,7 +11,8 @@ class FlowEdge<N>(edge: Edge<N>, val capacity: Int, flow: Int = 0) :
     private fun validateFlow(flow: Int): Int {
         if (flow in 0..capacity) {
             return flow
-        } else {
+        }
+        else {
             throw IllegalArgumentException("Flow must be in [0..capacity] range, ${flow} is invalid")
         }
     }

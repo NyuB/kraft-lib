@@ -8,7 +8,8 @@ class PathBacktrackLabel<N, E : Edge<N>>(val node: N, val previous: Pair<E, Path
     private fun asEdgePath(origin: N, destination: N, accumulator: MutableList<E>): EdgePath<N, E> {
         return if (previous == null) {
             EdgePath(origin, destination, accumulator.reversed())
-        } else {
+        }
+        else {
             accumulator.add(previous.first)
             previous.second.asEdgePath(origin, destination, accumulator)
         }

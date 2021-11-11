@@ -9,9 +9,10 @@ import graph.Edge
 import graph.FlowEdge
 import graph.FlowGraph
 
-class BipartiteFlowAlgorithm<Worker, Job>(val input: BipartiteProblem<Worker, Job>) : BipartiteSolver<Worker, Job> {
+class BipartiteFlowSolver<Worker, Job>(val input: BipartiteProblem<Worker, Job>) : BipartiteSolver<Worker, Job> {
 
     internal class BipartiteNode<A, B> {
+
         var worker: A? = null
         var job: B? = null
         fun setAsWorker(worker: A): BipartiteNode<A, B> {
@@ -44,6 +45,16 @@ class BipartiteFlowAlgorithm<Worker, Job>(val input: BipartiteProblem<Worker, Jo
     private val algorithm: BusackerGowenAlgorithm<BipartiteNode<Worker, Job>, FlowEdge<BipartiteNode<Worker, Job>>>
 
     init {
+        buildInitialGraph()
+        algorithm = buildInitialAlgorithm()
+
+    }
+
+    private fun buildInitialAlgorithm(): BusackerGowenAlgorithm<BipartiteNode<Worker, Job>, FlowEdge<BipartiteNode<Worker, Job>>> {
+        return BusackerGowenAlgorithm(MaxFlowAlgorithmInput(graph)) { i -> BellmanFordAlgorithm(i) }
+    }
+
+    private fun buildInitialGraph() {
         val jobNodes = ArrayList<BipartiteNode<Worker, Job>>()
 
         for (job in input.jobs) {
@@ -60,11 +71,9 @@ class BipartiteFlowAlgorithm<Worker, Job>(val input: BipartiteProblem<Worker, Jo
                 graph.addEdge(edge)
             }
         }
-
-        algorithm = BusackerGowenAlgorithm(MaxFlowAlgorithmInput(graph)) { i -> BellmanFordAlgorithm(i) }
     }
 
-    override fun step(): StepableComputation<BipartiteProblem<Worker, Job>, Map<Worker, Job>> {
+    override fun step(): StepableComputation<BipartiteProblem<Worker, Job>, BipartiteSolution<Worker, Job>> {
         algorithm.step()
         return this
     }
@@ -77,26 +86,28 @@ class BipartiteFlowAlgorithm<Worker, Job>(val input: BipartiteProblem<Worker, Jo
         return algorithm.isEnded()
     }
 
-    override fun computeUntilEnd(): StepableComputation<BipartiteProblem<Worker, Job>, Map<Worker, Job>> {
+    override fun computeUntilEnd(): StepableComputation<BipartiteProblem<Worker, Job>, BipartiteSolution<Worker, Job>> {
         algorithm.computeUntilEnd()
         return this
     }
 
-    override fun getResult(): ComputationResult<Map<Worker, Job>> {
-        val algorithmResult = algorithm.getResult()
-        var res = ComputationResult<Map<Worker, Job>>(null)
+    override fun getResult(): ComputationResult<BipartiteSolution<Worker, Job>> {
+        var res = ComputationResult<BipartiteSolution<Worker, Job>>(null)
 
-        algorithmResult.ifSuccessCompute { resultGraph ->
+        algorithm.getResult().ifSuccessCompute { resultGraph ->
             val resMap = HashMap<Worker, Job>()
+            var resCost = 0.0
             for (node in resultGraph.nodeSet().filter { it != sink && it != source && it.isWorker() }) {
                 for (edge in resultGraph.getOutEdgesFrom(node)) {
                     if (edge.flow == edge.capacity) {
                         resMap[edge.origin.asWorker()] = edge.destination.asJob()
+                        resCost += edge.weight
                     }
                 }
             }
-            res = ComputationResult(resMap)
+            res = ComputationResult(BipartiteSolution(resMap, resCost))
         }
+
         return res
     }
 }

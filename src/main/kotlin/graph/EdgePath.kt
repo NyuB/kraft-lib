@@ -1,14 +1,17 @@
 package graph
 
 class EdgePath<N, E : Edge<N>>(val origin: N, val destination: N, val edges: List<E>) {
+
     val isValid = validate()
 
     private fun validate(): Boolean {
         if (edges.isEmpty()) {
             return origin == destination
-        } else if (origin != edges[0].origin || destination != edges.last().destination) {
+        }
+        else if (origin != edges[0].origin || destination != edges.last().destination) {
             return false
-        } else {
+        }
+        else {
             var lastDestination = edges[0].destination
             for (i in 1 until edges.size) {
                 val edge = edges[i]

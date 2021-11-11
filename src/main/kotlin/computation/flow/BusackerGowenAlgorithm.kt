@@ -61,7 +61,8 @@ class BusackerGowenAlgorithm<N, E : FlowEdge<N>>(
     override fun step(): AbstractAlgorithm<MaxFlowAlgorithmInput<N, E>, FlowGraph<N, E>> {
         if (shortestPathAlgorithm.isRunning()) {
             shortestPathAlgorithm.step()
-        } else {
+        }
+        else {
             val pathResult = shortestPathAlgorithm.getResult()
             pathResult.ifSuccessCompute { path ->
                 updateFlowAlongPath(path)
